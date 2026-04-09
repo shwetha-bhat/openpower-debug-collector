@@ -13,8 +13,8 @@ constexpr auto dumpOutPath = "/var/lib/phosphor-debug-collector/opdump";
 constexpr auto dumpStatusFailed =
     "xyz.openbmc_project.Common.Progress.OperationStatus.Failed";
 
-void DumpMonitor::executeCollectionScript(
-    const sdbusplus::message::object_path& path, const PropertyMap& properties)
+void DumpMonitor::executeCollectionScript(const sdbusplus::object_path& path,
+                                          const PropertyMap& properties)
 {
     std::vector<std::string> args = {"opdreport"};
     std::regex idFormat("^[a-fA-F0-9]{8}$");
@@ -100,7 +100,7 @@ void DumpMonitor::executeCollectionScript(
 
 void DumpMonitor::handleDBusSignal(sdbusplus::message_t& msg)
 {
-    sdbusplus::message::object_path objectPath;
+    sdbusplus::object_path objectPath;
     InterfaceMap interfaces;
 
     msg.read(objectPath, interfaces);
@@ -147,8 +147,7 @@ void DumpMonitor::updateProgressStatus(const std::string& path,
     }
 }
 
-void DumpMonitor::startMpReboot(
-    const sdbusplus::message::object_path& objectPath)
+void DumpMonitor::startMpReboot(const sdbusplus::object_path& objectPath)
 {
     constexpr auto systemdService = "org.freedesktop.systemd1";
     constexpr auto systemdObjPath = "/org/freedesktop/systemd1";

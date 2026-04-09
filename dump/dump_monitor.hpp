@@ -97,7 +97,7 @@ class DumpMonitor
      * @param[in] path - The object path of the dump entry.
      * @param[in] properties - The properties of the dump entry.
      */
-    void executeCollectionScript(const sdbusplus::message::object_path& path,
+    void executeCollectionScript(const sdbusplus::object_path& path,
                                  const PropertyMap& properties);
 
     /**
@@ -152,7 +152,7 @@ class DumpMonitor
      * @brief Initiates a memory-preserving reboot by starting the
      *        appropriate systemd unit.
      */
-    void startMpReboot(const sdbusplus::message::object_path& objectPath);
+    void startMpReboot(const sdbusplus::object_path& objectPath);
 };
 
 } // namespace openpower::dump
