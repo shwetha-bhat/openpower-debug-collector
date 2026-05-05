@@ -60,17 +60,25 @@ TargetList getAllOCMBTargets(TargetHandle proc)
 
     try
     {
-        // Use getChildTargets to get OCMB chips directly associated with this
-        // processor This uses the affinity/association links, not physical
-        // hierarchy
+        // Initialize OCMB targets before accessing them
+        TARGETING::utils::initializeOcmbTargets();
+        
+        // Get OCMB chips associated with this processor via affinity links
+        // (not physical hierarchy - uses association/affinity attributes)
         auto ocmbList = TARGETING::utils::getChildTargets(
             proc, TARGETING::TYPE_OCMB_CHIP, TARGETING::childByAffinity);
 
-        // Filter for functional targets only
+        // Collect functional OCMB targets and configure hardware access
         for (auto ocmb : ocmbList)
         {
             if (TARGETING::utils::isFunctional(ocmb))
             {
+                // Configure this OCMB to use SBEFIFO for hardware access
+                // This is required for Odyssey OCMBs which are accessed
+                // through the processor's SBE FIFO interface
+                hwaccess::utils::setTargetHwAccessMethod(
+                    TARGETING::HW_ACCESS_METHOD_SBEFIFO, ocmb);
+                
                 result.push_back(ocmb);
             }
         }
